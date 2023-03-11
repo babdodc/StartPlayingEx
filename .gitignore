@@ -1,3 +1,3 @@
 
-popularity/.venv/*
-spells/node_modules/*
+popularity/.venv/
+spells/node_modules/
