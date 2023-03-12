@@ -15,18 +15,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
   image: string | undefined
 }
 
-interface SpellResponse<T> {
-  page: number
-  per_page: number
-  total: number
-  total_pages: number
-  data: {spells: Spell[]}
-}
-
 export const spellApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'https://startplaying.games/api/detect-magic' }),
   endpoints: (builder) => ({
-    listSpells: builder.query<SpellResponse<Spell>, number | void>({
+    listSpells: builder.query<{spells: Spell[]}, number | void>({
       query: (page = 0) => `spells?page=${page}`,
     }),
   }),
