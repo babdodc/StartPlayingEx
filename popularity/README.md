@@ -2,7 +2,7 @@
 1. Make sure you have installed python3 on your computer: https://www.python.org/downloads/
 2. Create a virtual env in the current directory of the Readme:
     1. Follow the instructions here: https://code.visualstudio.com/docs/python/environments
-3. Run ```python -r requirements.txt```
+3. Run ```pip -r requirements.txt```
 4. Run ```flask db init```
 5. Run ```flask db upgrade```
 
