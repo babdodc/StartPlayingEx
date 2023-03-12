@@ -3,8 +3,7 @@
 2. Create a virtual env in the current directory of the Readme:
     1. Follow the instructions here: https://code.visualstudio.com/docs/python/environments
 3. Run ```pip -r requirements.txt```
-4. Run ```flask db init```
-5. Run ```flask db upgrade```
+4. Run ```flask db upgrade```
 
 #Running the Application
 1. Run ```flask run```. It will be served at port 5000.
