@@ -1,7 +1,10 @@
-from flask import Blueprint
+from flask import Blueprint,jsonify
+from operations.queries import getAllGMs
 
 popularity_blueprint = Blueprint('popularity_blueprint', __name__,url_prefix="/api/v1")
 
 @popularity_blueprint.route('/popularity',methods=['GET'])
 def index():
-    return "This is an example app"
+    result = getAllGMs()
+    return jsonify([x.as_dict() for x in result])
+
