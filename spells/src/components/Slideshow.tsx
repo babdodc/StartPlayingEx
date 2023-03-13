@@ -1,4 +1,4 @@
-import { useEffect, useState,useMemo } from "react"
+import { useEffect, useState, useMemo, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useListSpellsQuery } from "../services/spell";
 import { SpellCard } from "./SpellCard";
@@ -15,143 +15,74 @@ import SwipeableViews from 'react-swipeable-views-react-18-fix';
 import { useTheme } from '@mui/material/styles';
 import { autoPlay } from 'react-swipeable-views-utils';
 
-export const Slideshow = () =>
-{
-    const [page, setPage] = useState(0);
-    const { data: spells, isLoading, isFetching } = useListSpellsQuery(page);
-    const theme = useTheme();
-    const [activeStep, setActiveStep] = useState(0);
-    const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+export const Slideshow = () => {
+  const [page, setPage] = useState(0);
+  const { data: spells, isLoading, isFetching } = useListSpellsQuery(page);
+  const theme = useTheme();
+  const [activeStep, setActiveStep] = useState(0);
+  const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+  const [maxSteps,setMaxSteps] = useState(0)
+  const pageRef = useRef(0)
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      };
-    
-      const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-      };
-    
-      const handleStepChange = (step: number) => {
-        setActiveStep(step);
-      };
-    const currentSpells = useMemo(()=>{
-        if (!spells) return null
-        return spells.spells.map((t)=> <SpellCard spell ={t}/>)
-    },[spells])
+  const handleNext = () => {
 
-    const maxSteps = spells?spells.spells.length : 0;
-      
-       
-      
-  //   return (
-  //     <div>
-  //         <Box sx={{ flexGrow: 1 }}>
-  //           <div className="cardOuterWrapper" >
-  //           {/* <Paper
-  //             square
-  //             elevation={0}
-  //             sx={{
-  //               display: 'flex',
-  //               alignItems: 'spaceAround',
-  //               height: "100%",
-  //               pl: 2,
-  //               bgcolor: 'background.default',
-  //             }}
-  //           >
-  //             <Typography>{spells?.spells[activeStep].name}</Typography>
-  //             <Typography>{spells?.spells[activeStep].school}</Typography>
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
 
-  //           </Paper> */}
-  //           {/* <AutoPlaySwipeableViews
-  //             axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-  //             index={activeStep}
-  //             onChangeIndex={handleStepChange}
-  //             enableMouseEvents
-  //           >
-  //             {spells?.spells.map((step, index) => (
-  //               <div key={step.name}>
-  //                 {Math.abs(activeStep - index) <= 2 ? (
-  // <div className="cardInnerWrapper" style={{backgroundColor:"darkgrey"}}>                
-  // <img style={{objectFit:"contain", height:"100%"}} src={spells?.spells[activeStep].image}/>
-  // </div>                    ) : null}
-  //               </div>
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
-                
-  //             ))}
-  //           </AutoPlaySwipeableViews> */}
-  // {/* <div className="cardInnerWrapper" style={{backgroundColor:"darkgrey"}}>                
-  // <img style={{objectFit:"contain", height:"100%"}} src={spells?.spells[activeStep].image}/>
-  // </div>    */}
-  // {spells? <SpellCard spell={spells?.spells[activeStep]}/>     : null}
-  // </div>
-  //           <MobileStepper
-  //             steps={maxSteps}
-  //             position="static"
-  //             activeStep={activeStep}
-  //             nextButton={
-  //               <Button
-  //                 size="small"
-  //                 onClick={handleNext}
-  //                 disabled={activeStep === maxSteps - 1}
-  //               >
-  //                 Next
-  //                 {theme.direction === 'rtl' ? (
-  //                   <KeyboardArrowLeft />
-  //                 ) : (
-  //                   <KeyboardArrowRight />
-  //                 )}
-  //               </Button>
-  //             }
-  //             backButton={
-  //               <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-  //                 {theme.direction === 'rtl' ? (
-  //                   <KeyboardArrowRight />
-  //                 ) : (
-  //                   <KeyboardArrowLeft />
-  //                 )}
-  //                 Back
-  //               </Button>
-  //             }
-  //           />
-  //         </Box>
 
-  //         </div>
-  //       );
-      
+  useEffect(() => {
+
+    if (maxSteps === activeStep + 1 ) setPage((prevPage) => prevPage + 1)
+    if (activeStep < 0) setPage((prevPage) => prevPage > 0 ? prevPage - 1: 0)
+
+  }, [activeStep,maxSteps])
+
+  useEffect(()=>{
+    setMaxSteps( spells ? spells.spells.length  : 0)
+    //check if page increase or decrease to set active valu
+     pageRef.current > page +1 ? setActiveStep(3) :setActiveStep(0)
+    pageRef.current = page + 1;
+
+  },[page,spells])
   return <div className="slideshow">
-  <div className="slideshowInnerWrapper">
-   {spells? <SpellCard spell={spells?.spells[activeStep]}/>     : null}
-  </div>
-  <MobileStepper
-  steps={maxSteps}
-  position="static"
-  activeStep={activeStep}
-  nextButton={
-    <Button
-      size="small"
-      onClick={handleNext}
-      disabled={activeStep === maxSteps - 1}
-    >
-      Next
-      {theme.direction === 'rtl' ? (
-        <KeyboardArrowLeft />
-      ) : (
-        <KeyboardArrowRight />
-      )}
-    </Button>
-  }
-  backButton={
-    <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-      {theme.direction === 'rtl' ? (
-        <KeyboardArrowRight />
-      ) : (
-        <KeyboardArrowLeft />
-      )}
-      Back
-    </Button>
-  }
-/>
-</div>
+    <div className="slideshowInnerWrapper">
+      {spells && activeStep >= 0 && spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep].name} spell={spells.spells[activeStep]} /> : null}
 
-    
+    </div>
+    <MobileStepper
+      steps={maxSteps}
+      position="static"
+      activeStep={activeStep}
+      nextButton={
+        <Button
+          size="small"
+          onClick={handleNext}
+          disabled={activeStep === maxSteps - 1}
+        >
+          Next
+          {theme.direction === 'rtl' ? (
+            <KeyboardArrowLeft />
+          ) : (
+            <KeyboardArrowRight />
+          )}
+        </Button>
+      }
+      backButton={
+        <Button size="small" onClick={handleBack} disabled={activeStep === 0 && page === 0}>
+          {theme.direction === 'rtl' ? (
+            <KeyboardArrowRight />
+          ) : (
+            <KeyboardArrowLeft />
+          )}
+          Back
+        </Button>
+      }
+    />
+  </div>
+
+
 }
