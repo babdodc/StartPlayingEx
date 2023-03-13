@@ -81,7 +81,7 @@ img {
 
 
 }
-
+/* 
 @media screen and (min-width: 600px)  {
   .previous
   {
@@ -96,7 +96,7 @@ img {
   
   
   }
-}
+} */
 @media screen and (max-width: 600px)  {
   .spellCard
 {
