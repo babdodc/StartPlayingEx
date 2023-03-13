@@ -27,6 +27,8 @@ html,body{
     justify-items:center;
      align-items:center;
       justify-content:center;
+      gap: 10px;
+
 }
 .cardOuterWrapper {
 
@@ -65,6 +67,23 @@ img {
 .spellCard
 {
   width: 350px;
+}
+.previous
+{
+  clip-path: polygon(50% 0, 100% 0%, 100% 100%, 50% 100%);
+  -webkit-clip-path: polygon(50% 0, 100% 0%, 100% 100%, 50% 100%);
+  filter:blur(2px);
+  -webkit-filter: blur(2px);
+
+}
+.next
+{
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
+  -webkit-clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
+  filter:blur(2px);
+  -webkit-filter: blur(2px);
+
+
 }
 @media screen and (max-width: 600px)  {
   .spellCard

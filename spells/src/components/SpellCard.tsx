@@ -16,13 +16,15 @@ import { CardActionArea } from '@mui/material';
 
 export interface SpellCardProps
 {
-    spell:Spell
+    spell:Spell;
+    increment: number;
+    onSelect: () => void | null | undefined;
 }
 export const SpellCard = (props:SpellCardProps) =>{
-    const {spell} = props;
-    return <div className="cardInnerWrapper">
+    const {spell,increment,onSelect} = props;
+    return <div className={`cardInnerWrapper ${increment < 0 ? "previous": increment > 0? "next": ""}`}>
 
-<Card className="spellCard">
+<Card className="spellCard" onClick={onSelect}>
       <CardActionArea>
         <CardMedia
           component="img"

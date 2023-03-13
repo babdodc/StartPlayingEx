@@ -50,7 +50,11 @@ export const Slideshow = () => {
   },[page,spells])
   return <div className="slideshow">
     <div className="slideshowInnerWrapper">
-      {spells && activeStep >= 0 && spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep].name} spell={spells.spells[activeStep]} /> : null}
+    {spells && activeStep -1 >= 0 && spells.spells.length > 0 ? <SpellCard  key={spells.spells[activeStep -1].name} spell={spells.spells[activeStep -1]} increment={-1} onSelect= {handleBack}/> : null}
+
+    {spells && activeStep >= 0 && spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep].name} spell={spells.spells[activeStep]} increment={0}  onSelect={()=>null}/> : null}
+
+      {spells && activeStep  + 1 >= 0 && spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep + 1].name} spell={spells.spells[activeStep + 1]} increment={1} onSelect= {handleNext}/> : null}
 
     </div>
     <MobileStepper
