@@ -19,6 +19,7 @@ export const Slideshow = () => {
   const [page, setPage] = useState(0);
   const { data: spells, isLoading, isFetching } = useListSpellsQuery(page);
   const { data: previousSpells } = useListSpellsQuery(page > 0? page-1: 0);
+  const { data: nextSpells } = useListSpellsQuery(page+1);
 
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
@@ -38,18 +39,20 @@ export const Slideshow = () => {
 
   useEffect(() => {
 
-    if (maxSteps === activeStep + 1 ) setPage((prevPage) => prevPage + 1)
+    if (maxSteps === activeStep && maxSteps !== 0) setPage((prevPage) => prevPage + 1)
     if (activeStep < 0) setPage((prevPage) => prevPage > 0 ? prevPage - 1: 0)
+
 
   }, [activeStep,maxSteps])
 
   useEffect(()=>{
     setMaxSteps( spells ? spells.spells.length  : 0)
     //check if page increase or decrease to set active valu
-     pageRef.current > page +1 ? setActiveStep(3) :setActiveStep(0)
+     pageRef.current > page +1 ? setActiveStep(4) :setActiveStep(0)
     pageRef.current = page + 1;
 
   },[page,spells])
+
   return <div className="slideshow">
     <div className="slideshowInnerWrapper">
     
@@ -57,9 +60,11 @@ export const Slideshow = () => {
     : page > 0 &&  previousSpells  && previousSpells.spells.length > 0 ? <SpellCard  key={previousSpells.spells[4].name} spell={previousSpells.spells[4]} increment={-1} onSelect= {handleBack}/> : null}
 
 
-    {spells && activeStep >= 0 && spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep].name} spell={spells.spells[activeStep]} increment={0}  onSelect={()=>null}/> : null}
+    {spells && activeStep >= 0 && activeStep < spells.spells.length &&  spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep].name} spell={spells.spells[activeStep]} increment={0}  onSelect={()=>null}/> : null}
 
-      {spells && activeStep  + 1  <  spells.spells.length&& spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep + 1].name} spell={spells.spells[activeStep + 1]} increment={1} onSelect= {handleNext}/> : null}
+      {spells && activeStep  + 1  <  spells.spells.length&& spells.spells.length > 0 ? 
+      <SpellCard key={spells.spells[activeStep + 1].name} spell={spells.spells[activeStep + 1]} increment={1} onSelect= {handleNext}/> 
+      : nextSpells &&  activeStep  + 1 - maxSteps  >= 0   &&  activeStep  + 1 - maxSteps  < nextSpells.spells.length?  <SpellCard key={nextSpells.spells[activeStep + 1 - maxSteps].name} spell={nextSpells.spells[activeStep + 1 - maxSteps]} increment={1} onSelect= {handleNext}/> : null}
 
     </div>
     <MobileStepper
