@@ -75,7 +75,7 @@ export const Slideshow = () => {
         <Button
           size="small"
           onClick={handleNext}
-          disabled={activeStep === maxSteps - 1}
+          disabled={activeStep === maxSteps - 1 && nextSpells?.spells.length  ===0}
         >
           Next
           {theme.direction === 'rtl' ? (
