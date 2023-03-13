@@ -18,6 +18,8 @@ import { autoPlay } from 'react-swipeable-views-utils';
 export const Slideshow = () => {
   const [page, setPage] = useState(0);
   const { data: spells, isLoading, isFetching } = useListSpellsQuery(page);
+  const { data: previousSpells } = useListSpellsQuery(page > 0? page-1: 0);
+
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
   const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -50,11 +52,14 @@ export const Slideshow = () => {
   },[page,spells])
   return <div className="slideshow">
     <div className="slideshowInnerWrapper">
-    {spells && activeStep -1 >= 0 && spells.spells.length > 0 ? <SpellCard  key={spells.spells[activeStep -1].name} spell={spells.spells[activeStep -1]} increment={-1} onSelect= {handleBack}/> : null}
+    
+    {activeStep -1 >= 0 ? spells  && spells.spells.length > 0 ? <SpellCard  key={spells.spells[activeStep -1].name} spell={spells.spells[activeStep -1]} increment={-1} onSelect= {handleBack}/> : null
+    : page > 0 &&  previousSpells  && previousSpells.spells.length > 0 ? <SpellCard  key={previousSpells.spells[4].name} spell={previousSpells.spells[4]} increment={-1} onSelect= {handleBack}/> : null}
+
 
     {spells && activeStep >= 0 && spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep].name} spell={spells.spells[activeStep]} increment={0}  onSelect={()=>null}/> : null}
 
-      {spells && activeStep  + 1 >= 0 && spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep + 1].name} spell={spells.spells[activeStep + 1]} increment={1} onSelect= {handleNext}/> : null}
+      {spells && activeStep  + 1  <  spells.spells.length&& spells.spells.length > 0 ? <SpellCard key={spells.spells[activeStep + 1].name} spell={spells.spells[activeStep + 1]} increment={1} onSelect= {handleNext}/> : null}
 
     </div>
     <MobileStepper
